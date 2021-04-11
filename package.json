@@ -1,8 +1,11 @@
 {
   "name": "rbxts-build",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "out/index.js",
+  "bin": {
+    "rbxts-build": "out/index.js"
+  },
   "scripts": {
     "build": "ttsc",
     "build-watch": "ttsc -w",
