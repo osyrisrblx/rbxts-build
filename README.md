@@ -58,10 +58,18 @@ You can use `rbxts-build init` to automatically setup these scripts for you. It'
 },
 ```
 
+## Hooks
+You can run scripts before and after any **rbxts-build** script by editing your `package.json` scripts.
+
+For example:
+```json
+"build": "echo 'pre-build command' && rbxts-build build && echo 'post-build command'",
+```
+
 ## Assumptions
 
 **rbxts-build** assumes a few things about your project's structure:
-- Must be a game
+- Project must be a game which is fully managed by Rojo
 - Scripts are run from your project directory (where `package.json` lives)
 - If you're using WSL, `rojo` and `remodel` are installed inside of WSL, and not Windows.
 	- Will add a setting for this to use .exe versions
