@@ -3,7 +3,7 @@ import { getPackageJson } from "../util/getPackageJson";
 import { identity } from "../util/identity";
 import { run } from "../util/run";
 
-const command = "build";
+const command = "compile";
 
 async function handler() {
 	const projectPath = process.cwd();
