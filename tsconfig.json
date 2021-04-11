@@ -11,6 +11,7 @@
 		"removeComments": true,
 		"composite": true,
 		"sourceMap": true,
+		"tsBuildInfoFile": "out/tsconfig.tsbuildinfo",
 
 		"rootDir": "src",
 		"outDir": "out"
