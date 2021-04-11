@@ -5,6 +5,7 @@ import { run } from "../util/run";
 const command = "start";
 
 async function handler() {
+	await run("npm", ["run", "compile", "--silent"]);
 	await run("npm", ["run", "build", "--silent"]);
 	await run("npm", ["run", "open", "--silent"]);
 }

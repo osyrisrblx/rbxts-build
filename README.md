@@ -6,12 +6,14 @@ An opinionated build orchestrator for [roblox-ts](https://roblox-ts.com)
 
 **rbxts-build** works by creating several scripts inside of your `package.json` file's "scripts" object.
 
-- **build**
+- **compile**
 	- `rbxtsc --verbose`
+- **build**
 	- `rojo build --output game.rbxlx`
 - **open**
 	- Launches Roblox Studio with `game.rbxlx`
 - **start**
+	- `npm run compile`
 	- `npm run build`
 	- `npm run open`
 - **stop**
@@ -20,7 +22,6 @@ An opinionated build orchestrator for [roblox-ts](https://roblox-ts.com)
 	- `rojo build --output game.rbxlx`
 	- Uses `remodel` to generate a `src/services.d.ts` file for indexing existing children in roblox-ts.
 		- [Refer to this guide for more information](https://roblox-ts.com/docs/guides/indexing-children/)
-
 
 These scripts should be structured in your `package.json` file as:
 ```json

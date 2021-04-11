@@ -1,5 +1,4 @@
 import yargs from "yargs";
-import { PLACEFILE_NAME } from "../constants";
 import { getPackageJson } from "../util/getPackageJson";
 import { identity } from "../util/identity";
 import { run } from "../util/run";
@@ -11,7 +10,7 @@ async function handler() {
 	const pkgJson = getPackageJson(projectPath);
 	const settings = pkgJson?.["rbxts-build"] ?? {};
 
-	await run("rojo", ["build", ...(settings.rojoBuildArgs ?? ["--output", PLACEFILE_NAME])]);
+	await run(settings.dev ? "rbxtsc-dev" : "rbxtsc", settings.rbxtscArgs ?? ["--verbose"]);
 }
 
 export = identity<yargs.CommandModule>({ command, handler });

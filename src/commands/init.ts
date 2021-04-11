@@ -6,7 +6,7 @@ import { identity } from "../util/identity";
 
 const command = "init";
 
-const SCRIPT_NAMES = ["build", "open", "start", "stop", "sync"];
+const SCRIPT_NAMES = ["compile", "build", "open", "start", "stop", "sync"];
 
 async function handler(args: yargs.Arguments) {
 	const name = path.basename(args.$0);
