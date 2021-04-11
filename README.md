@@ -1,6 +1,6 @@
 # rbxts-build
 
-An optionated build orchestrator for [roblox-ts](https://roblox-ts.com)
+An opinionated build orchestrator for [roblox-ts](https://roblox-ts.com)
 
 ## Usage
 
