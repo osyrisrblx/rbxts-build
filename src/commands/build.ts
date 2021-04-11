@@ -1,8 +1,8 @@
 import yargs from "yargs";
 import { PLACEFILE_NAME } from "../constants";
-import { run } from "../util/run";
 import { getPackageJson } from "../util/getPackageJson";
 import { identity } from "../util/identity";
+import { run } from "../util/run";
 
 const command = "build";
 

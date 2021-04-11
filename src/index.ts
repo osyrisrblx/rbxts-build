@@ -1,6 +1,6 @@
+import chalk from "chalk";
 import yargs from "yargs";
 import { PACKAGE_ROOT, VERSION } from "./constants";
-import chalk from "chalk";
 import { CLIError } from "./errors/CLIError";
 
 chalk.level = 3;

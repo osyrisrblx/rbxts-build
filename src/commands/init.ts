@@ -1,8 +1,8 @@
-import yargs from "yargs";
-import { identity } from "../util/identity";
-import path from "path";
 import fs from "fs/promises";
+import path from "path";
+import yargs from "yargs";
 import { CLIError } from "../errors/CLIError";
+import { identity } from "../util/identity";
 
 const command = "init";
 

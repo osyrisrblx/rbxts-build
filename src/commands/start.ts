@@ -1,6 +1,6 @@
 import yargs from "yargs";
-import { run } from "../util/run";
 import { identity } from "../util/identity";
+import { run } from "../util/run";
 
 const command = "start";
 
