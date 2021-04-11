@@ -12,9 +12,7 @@ async function handler() {
 	const pkgJson = getPackageJson(projectPath);
 	const settings = getSettings(pkgJson);
 
-	const rojoBuildArgs = settings.rojoBuildArgs ?? ["--output", PLACEFILE_NAME];
-
-	await run("rojo", ["build", ...rojoBuildArgs]);
+	await run("npm", ["run", "build", "--silent"]);
 
 	const outPath = settings.syncLocation ?? "src/services.d.ts";
 	await run("remodel", ["run", SYNC_SCRIPT_PATH, PLACEFILE_NAME, outPath]);
