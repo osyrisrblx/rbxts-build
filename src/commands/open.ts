@@ -12,6 +12,7 @@ async function handler() {
 	const projectPath = process.cwd();
 
 	await runPlatform({
+		darwin: () => run("open", [PLACEFILE_NAME]),
 		linux: async () => {
 			const fsPath = await getWindowsPath(path.join(projectPath, PLACEFILE_NAME));
 			return run("powershell.exe", ["/c", `start ${fsPath}`]);
