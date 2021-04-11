@@ -17,7 +17,7 @@ async function handler() {
 
 	await run("rojo", ["build", ...rojoBuildArgs]);
 
-	const outPath = "src/services.d.ts";
+	const outPath = settings.syncLocation ?? "src/services.d.ts";
 	await run("remodel", ["run", SYNC_SCRIPT_PATH, PLACEFILE_NAME, outPath]);
 }
 
