@@ -8,6 +8,10 @@ Requires Node.js v14 or later.
 
 **rbxts-build** works by creating several scripts inside of your `package.json` file's "scripts" object.
 
+You can use `rbxts-build init` to automatically setup these scripts for you. It's often useful to do the following when setting up a new roblox-ts project:
+- `rbxtsc init`
+- `rbxts-build init`
+
 - **compile**
 	- `rbxtsc --verbose`
 - **build**
@@ -39,10 +43,6 @@ These scripts should be structured in your `package.json` file as:
 From there, you can use `npm start`, to launch your project.
 
 Once you've started working, it's convenient to use `npm restart` (or `npm res` for short) to run `npm stop` and then `npm start`.
-
-You can use `rbxts-build init` to automatically setup these scripts for you. It's often useful to do the following when setting up a new roblox-ts project:
-- `rbxtsc init`
-- `rbxts-build init`
 
 ## Settings
 
