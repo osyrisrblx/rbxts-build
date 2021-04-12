@@ -78,4 +78,4 @@ for _, service in ipairs(game:GetChildren()) do
 	end
 end
 
-remodel.writeFile(outPath, output:match("^(.-)%s*$") .. "\n")
+remodel.writeFile(outPath, string.match(output, "^(.-)%s*$") .. "\n")
