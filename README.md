@@ -4,6 +4,8 @@ An opinionated build orchestrator for [roblox-ts](https://roblox-ts.com)
 
 ## Usage
 
+Requires Node.js v14 or later.
+
 **rbxts-build** works by creating several scripts inside of your `package.json` file's "scripts" object.
 
 - **compile**
