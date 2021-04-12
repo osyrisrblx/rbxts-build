@@ -1,6 +1,5 @@
 import yargs from "yargs";
 import { PLACEFILE_NAME, SYNC_SCRIPT_PATH } from "../constants";
-import { getPackageJson } from "../util/getPackageJson";
 import { getSettings } from "../util/getSettings";
 import { getWindowsPath } from "../util/getWindowsPath";
 import { identity } from "../util/identity";
@@ -11,8 +10,7 @@ const command = "sync";
 
 async function handler() {
 	const projectPath = process.cwd();
-	const pkgJson = getPackageJson(projectPath);
-	const settings = getSettings(pkgJson);
+	const settings = await getSettings(projectPath);
 
 	await run("npm", ["run", "build", "--silent"]);
 

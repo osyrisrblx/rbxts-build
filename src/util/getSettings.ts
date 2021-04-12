@@ -1,5 +1,10 @@
 import { packageJsonType } from "../typeChecks";
+import fs from "fs/promises";
+import path from "path";
 
-export function getSettings(pkgJson: packageJsonType | undefined) {
+export async function getSettings(projectPath: string) {
+	const pkgJsonPath = path.join(projectPath, "package.json");
+	const pkgJsonContents = (await fs.readFile(pkgJsonPath)).toString();
+	const pkgJson = packageJsonType.parse(JSON.parse(pkgJsonContents));
 	return pkgJson?.["rbxts-build"] ?? {};
 }

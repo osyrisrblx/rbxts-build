@@ -1,5 +1,4 @@
 import yargs from "yargs";
-import { getPackageJson } from "../util/getPackageJson";
 import { getSettings } from "../util/getSettings";
 import { identity } from "../util/identity";
 import { run } from "../util/run";
@@ -8,8 +7,7 @@ const command = "compile";
 
 async function handler() {
 	const projectPath = process.cwd();
-	const pkgJson = getPackageJson(projectPath);
-	const settings = getSettings(pkgJson);
+	const settings = await getSettings(projectPath);
 
 	await run(settings.dev ? "rbxtsc-dev" : "rbxtsc", settings.rbxtscArgs ?? ["--verbose"]);
 }
