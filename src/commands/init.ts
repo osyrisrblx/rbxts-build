@@ -8,8 +8,7 @@ const command = "init";
 
 const SCRIPT_NAMES = ["compile", "build", "open", "start", "stop", "sync"];
 
-async function handler(args: yargs.Arguments) {
-	const name = path.basename(args.$0);
+async function handler() {
 	const projectPath = process.cwd();
 	const pkgJsonPath = path.join(projectPath, "package.json");
 	await fs.access(pkgJsonPath);
@@ -23,7 +22,7 @@ async function handler(args: yargs.Arguments) {
 		}
 	}
 	for (const scriptName of SCRIPT_NAMES) {
-		pkgJson.scripts[scriptName] = `${name} ${scriptName}`;
+		pkgJson.scripts[scriptName] = `rbxts-build ${scriptName}`;
 	}
 	await fs.writeFile(pkgJsonPath, JSON.stringify(pkgJson, undefined, 2));
 }
