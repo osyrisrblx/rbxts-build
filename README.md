@@ -10,7 +10,8 @@ Requires Node.js v14 or later.
 
 You can use `rbxts-build init` to automatically setup these scripts for you. It's often useful to do the following when setting up a new roblox-ts project:
 - `rbxtsc init`
-- `rbxts-build init`
+- `npm install -D rbxts-build`
+- `npx rbxts-build init`
 
 - **compile**
 	- `rbxtsc --verbose`
