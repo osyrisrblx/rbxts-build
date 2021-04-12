@@ -12,13 +12,15 @@ export const packageJsonType = z
 				sync: z.string().optional(),
 			})
 			.nonstrict(),
-		"rbxts-build": z.object({
-			rbxtscArgs: z.array(z.string()).optional(),
-			rojoBuildArgs: z.array(z.string()).optional(),
-			syncLocation: z.string().optional(),
-			wslUseExe: z.boolean().optional(),
-			dev: z.boolean().optional(),
-		}),
+		"rbxts-build": z
+			.object({
+				rbxtscArgs: z.array(z.string()).optional(),
+				rojoBuildArgs: z.array(z.string()).optional(),
+				syncLocation: z.string().optional(),
+				wslUseExe: z.boolean().optional(),
+				dev: z.boolean().optional(),
+			})
+			.optional(),
 	})
 	.nonstrict();
 
