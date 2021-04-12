@@ -11,9 +11,9 @@ const command = "stop";
 async function handler() {
 	const projectPath = process.cwd();
 
+	const lockFilePath = path.join(projectPath, LOCKFILE_NAME);
+
 	try {
-		const lockFilePath = path.join(projectPath, LOCKFILE_NAME);
-		await fs.access(lockFilePath);
 		const lockFileContents = (await fs.readFile(lockFilePath)).toString();
 		const processId = lockFileContents.split("\n")[0];
 
@@ -22,7 +22,9 @@ async function handler() {
 			linux: () => run("taskkill.exe", ["/f", "/pid", processId]),
 			win32: () => run("taskkill", ["/f", "/pid", processId]),
 		});
+	} catch {}
 
+	try {
 		await fs.rm(lockFilePath);
 	} catch {}
 }
