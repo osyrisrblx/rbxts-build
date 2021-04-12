@@ -6,5 +6,6 @@ const rootWslPath = new Lazy(async () => {
 });
 
 export async function getWindowsPath(fsPath: string) {
-	return (await rootWslPath.get()) + fsPath.replace(/\\/g, "\\\\").replace(/\//g, "\\").slice(1);
+	const windowsPath = (await rootWslPath.get()) + fsPath.replace(/\\/g, "\\\\").replace(/\//g, "\\").slice(1);
+	return windowsPath.replace(/\\/g, "\\\\");
 }
