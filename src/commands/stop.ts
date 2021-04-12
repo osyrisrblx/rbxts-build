@@ -15,12 +15,12 @@ async function handler() {
 		const lockFilePath = path.join(projectPath, LOCKFILE_NAME);
 		await fs.access(lockFilePath);
 		const lockFileContents = (await fs.readFile(lockFilePath)).toString();
-		const processIdStr = lockFileContents.split("\n")[0];
-		const processId = Number.parseInt(processIdStr);
+		const processId = lockFileContents.split("\n")[0];
 
 		await runPlatform({
-			linux: () => run("taskkill.exe", ["/f", "/pid", String(processId)]),
-			win32: () => run("taskkill", ["/f", "/pid", String(processId)]),
+			darwin: () => run("kill", [processId]),
+			linux: () => run("taskkill.exe", ["/f", "/pid", processId]),
+			win32: () => run("taskkill", ["/f", "/pid", processId]),
 		});
 
 		await fs.rm(lockFilePath);
