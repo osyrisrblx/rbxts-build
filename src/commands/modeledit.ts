@@ -17,13 +17,17 @@ const handler = async (args: yargs.Arguments) => {
 		},
 	});
 
+	const inputArgs = args._.slice(1).map(v => String(v));
 	await runPlatform({
 		linux: async () => {
-			const inputArgs = args._.slice(1).map(v => String(v));
 			for (let i = 0; i < inputArgs.length; i++) {
 				inputArgs[i] = (await cmd(`realpath ${inputArgs[i]}`)).trim();
 			}
+		},
+	});
 
+	await runPlatform({
+		linux: async () => {
 			await run("remodel", ["run", MODEL_IMPORT_SCRIPT_PATH, tmpFilePath, ...inputArgs]);
 			await run("powershell.exe", ["/c", `start -Wait ${await getWindowsPath(tmpFilePath)}`]);
 			await run("remodel", ["run", MODEL_EXPORT_SCRIPT_PATH, tmpFilePath]);
