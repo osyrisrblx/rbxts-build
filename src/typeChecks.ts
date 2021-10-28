@@ -9,6 +9,7 @@ export const packageJsonType = z
 				syncLocation: z.string().optional(),
 				wslUseExe: z.boolean().optional(),
 				dev: z.boolean().optional(),
+				watchOnOpen: z.boolean().optional(),
 			})
 			.optional(),
 	})

@@ -9,7 +9,8 @@ async function handler() {
 	const projectPath = process.cwd();
 	const settings = await getSettings(projectPath);
 
-	await run(settings.dev ? "rbxtsc-dev" : "rbxtsc", settings.rbxtscArgs ?? ["--verbose"]);
+	const rbxtsc = settings.dev ? "rbxtsc-dev" : "rbxtsc";
+	await run(rbxtsc, settings.rbxtscArgs ?? ["--verbose"]);
 }
 
 export = identity<yargs.CommandModule>({ command, handler });
