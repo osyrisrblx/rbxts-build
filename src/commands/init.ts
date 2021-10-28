@@ -12,18 +12,22 @@ async function handler() {
 	const projectPath = process.cwd();
 	const pkgJsonPath = path.join(projectPath, "package.json");
 	await fs.access(pkgJsonPath);
+
 	const pkgJson = JSON.parse((await fs.readFile(pkgJsonPath)).toString());
 	if (pkgJson.scripts === undefined) {
 		pkgJson.scripts = {};
 	}
+
 	for (const scriptName of SCRIPT_NAMES) {
 		if (pkgJson.scripts[scriptName] !== undefined) {
 			throw new CLIError(`Updating package.json failed, script "${scriptName}" already exists!`);
 		}
 	}
+
 	for (const scriptName of SCRIPT_NAMES) {
 		pkgJson.scripts[scriptName] = `rbxts-build ${scriptName}`;
 	}
+
 	await fs.writeFile(pkgJsonPath, JSON.stringify(pkgJson, undefined, 2));
 }
 
