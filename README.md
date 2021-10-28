@@ -60,6 +60,8 @@ Once you've started working, it's convenient to use `npm restart` (or `npm res` 
 	"dev": false,
 	// WSL-only, use .exe versions of rojo and remodel
 	"wslUseExe": false,
+	// Set this to `false` to make `rbxts-build open` NOT run `rbxtsc -w` + `rojo serve` automatically
+	"watchOnOpen": true,
 },
 ```
 
