@@ -54,13 +54,13 @@ Once you've started working, it's convenient to use `npm restart` (or `npm res` 
 	"rbxtscArgs": ["--verbose"],
 	// override arguments to rojo build, default provided below
 	"rojoBuildArgs": ["--output", "game.rbxlx"],
-	// provide a relative file location for the sync command output
+	// provide a relative file location for the sync command output, default provided below
 	"syncLocation": "src/services.d.ts",
-	// use rbxtsc-dev instead of rbxtsc
+	// use rbxtsc-dev instead of rbxtsc, default provided below
 	"dev": false,
-	// WSL-only, use .exe versions of rojo and remodel
+	// WSL-only, use .exe versions of rojo and remodel, default provided below
 	"wslUseExe": false,
-	// Set this to `false` to make `rbxts-build open` NOT run `rbxtsc -w` + `rojo serve` automatically
+	// run `rbxtsc -w` + `rojo serve` automatically after Studio opens, default provided below
 	"watchOnOpen": true,
 },
 ```
