@@ -7,7 +7,7 @@ import { CLIError } from "./errors/CLIError";
 
 chalk.level = 3;
 
-yargs
+void yargs
 	.usage("rbxts-build - A build tool for roblox-ts")
 	.help("help")
 	.alias("h", "help")
