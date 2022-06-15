@@ -1,6 +1,6 @@
 {
 	"name": "rbxts-build-dev",
 	"bin": {
-		"rbxts-build-dev": "rbxtsb-dev.js"
+		"rbxts-build-dev": "rbxts-build-dev.js"
 	}
 }
