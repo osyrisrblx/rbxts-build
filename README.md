@@ -16,9 +16,9 @@ You can use `rbxts-build init` to automatically setup these scripts for you. It'
 - **compile**
 	- `rbxtsc --verbose`
 - **build**
-	- `rojo build --output game.rbxlx`
+	- `rojo build --output game.rbxl`
 - **open**
-	- Launches Roblox Studio with `game.rbxlx`
+	- Launches Roblox Studio with `game.rbxl`
 - **start**
 	- `npm run compile`
 	- `npm run build`
@@ -26,7 +26,7 @@ You can use `rbxts-build init` to automatically setup these scripts for you. It'
 - **stop**
 	- Force kills the Roblox Studio process
 - **sync**
-	- `rojo build --output game.rbxlx`
+	- `rojo build --output game.rbxl`
 	- Uses `remodel` to generate a `src/services.d.ts` file for indexing existing children in roblox-ts.
 		- [Refer to this guide for more information](https://roblox-ts.com/docs/guides/indexing-children/)
 
@@ -53,7 +53,7 @@ Once you've started working, it's convenient to use `npm restart` (or `npm res` 
 	// override arguments to rbxtsc, default provided below
 	"rbxtscArgs": ["--verbose"],
 	// override arguments to rojo build, default provided below
-	"rojoBuildArgs": ["--output", "game.rbxlx"],
+	"rojoBuildArgs": ["--output", "game.rbxl"],
 	// provide a relative file location for the sync command output, default provided below
 	"syncLocation": "src/services.d.ts",
 	// use rbxtsc-dev instead of rbxtsc, default provided below

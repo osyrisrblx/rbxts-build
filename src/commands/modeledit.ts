@@ -13,7 +13,7 @@ const handler = async (args: yargs.Arguments) => {
 	await runPlatform({
 		linux: async () => {
 			const tmpFolderPath = (await cmd("mktemp -d")).trim();
-			tmpFilePath = `${tmpFolderPath}/modeledit.rbxlx`;
+			tmpFilePath = `${tmpFolderPath}/modeledit.rbxl`;
 		},
 	});
 
