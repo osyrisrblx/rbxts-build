@@ -6,7 +6,7 @@ import { identity } from "../util/identity";
 
 const command = "init";
 
-const SCRIPT_NAMES = ["compile", "build", "open", "start", "stop", "sync"];
+const SCRIPT_NAMES = ["compile", "build", "open", "start", "stop", "sync", "watch"];
 
 async function handler() {
 	const projectPath = process.cwd();
@@ -14,17 +14,12 @@ async function handler() {
 	await fs.access(pkgJsonPath);
 
 	const pkgJson = JSON.parse((await fs.readFile(pkgJsonPath)).toString());
-	if (pkgJson.scripts === undefined) {
-		pkgJson.scripts = {};
-	}
+	pkgJson.scripts ??= {};
 
 	for (const scriptName of SCRIPT_NAMES) {
 		if (pkgJson.scripts[scriptName] !== undefined) {
 			throw new CLIError(`Updating package.json failed, script "${scriptName}" already exists!`);
 		}
-	}
-
-	for (const scriptName of SCRIPT_NAMES) {
 		pkgJson.scripts[scriptName] = `rbxts-build ${scriptName}`;
 	}
 

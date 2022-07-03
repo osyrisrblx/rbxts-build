@@ -5,7 +5,7 @@ import { getSettings } from "../util/getSettings";
 import { getWindowsPath } from "../util/getWindowsPath";
 import { identity } from "../util/identity";
 import { run } from "../util/run";
-import { platform, runPlatform } from "../util/runPlatform";
+import { runPlatform } from "../util/runPlatform";
 
 const command = "open";
 
@@ -23,10 +23,7 @@ async function handler() {
 	});
 
 	if (settings.watchOnOpen !== false) {
-		const rojo = platform === "linux" && settings.wslUseExe ? "rojo.exe" : "rojo";
-		const rbxtsc = settings.dev ? "rbxtsc-dev" : "rbxtsc";
-		run(rojo, ["serve"]).catch(console.warn);
-		run(rbxtsc, ["-w"].concat(settings.rbxtscArgs ?? [])).catch(console.warn);
+		await run("npm", ["run", "watch", "--silent"]);
 	}
 }
 
