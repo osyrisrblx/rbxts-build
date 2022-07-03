@@ -66,12 +66,18 @@ Once you've started working, it's convenient to use `npm restart` (or `npm res` 
 ```
 
 ## Hooks
-You can run scripts before and after any **rbxts-build** script by editing your `package.json` scripts.
+You can run scripts before and after any **rbxts-build** script by adding new `package.json` scripts with `pre-` or `post-` suffixes.
 
 For example:
 ```json
-"build": "echo 'pre-build command' && rbxts-build build && echo 'post-build command'",
+"precompile": "echo 'pre-build command'",
+"postcompile": "echo 'post-build command'",
 ```
+
+npm will execute this as:
+1. `precompile`
+1. `compile`
+1. `postcompile`
 
 ## Assumptions
 
