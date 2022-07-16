@@ -42,10 +42,14 @@ local function writeService(service)
 		if name == "node_modules" then
 			return
 		end
+		local prefix = ""
+		if name == "Terrain" and instance.Parent == game.Workspace then
+			prefix = "readonly "
+		end
 		if not string.match(name, "^[_a-zA-Z][_a-zA-Z0-9]*$") then
 			name = '"' .. name .. '"'
 		end
-		local definition = name .. ": " .. instance.ClassName
+		local definition = prefix .. name .. ": " .. instance.ClassName
 		local children = instance:GetChildren()
 		if next(children) == nil then
 			writeLine(definition .. ";")
