@@ -18,7 +18,7 @@ async function handler() {
 		const processId = lockFileContents.split("\n")[0];
 
 		await runPlatform({
-			darwin: () => run("kill", [processId]),
+			darwin: () => run("kill", ["-9", processId]),
 			linux: () => run("taskkill.exe", ["/f", "/pid", processId]),
 			win32: () => run("taskkill", ["/f", "/pid", processId]),
 		});
