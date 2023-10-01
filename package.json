@@ -7,8 +7,8 @@
     "rbxts-build": "out/index.js"
   },
   "scripts": {
-    "build": "ttsc",
-    "build-watch": "ttsc -w",
+    "build": "tspc",
+    "build-watch": "tspc -w",
     "prepublishOnly": "npm run build",
     "devlink": "cd devlink && npm link"
   },
@@ -20,22 +20,23 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^17.0.44",
-    "@types/yargs": "^17.0.10",
-    "@typescript-eslint/eslint-plugin": "^5.28.0",
-    "@typescript-eslint/parser": "^5.28.0",
-    "eslint": "^8.17.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "prettier": "^2.7.0",
-    "ttypescript": "^1.5.13",
-    "typescript": "^4.7.3",
-    "typescript-transform-paths": "^3.3.1"
+    "@types/node": "^20.8.0",
+    "@types/yargs": "^17.0.26",
+    "@typescript-eslint/eslint-plugin": "^6.7.3",
+    "@typescript-eslint/parser": "^6.7.3",
+    "eslint": "^8.50.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "prettier": "^3.0.3",
+    "ts-patch": "^3.0.2",
+    "ttypescript": "^1.5.15",
+    "typescript": "^5.2.2",
+    "typescript-transform-paths": "^3.4.6"
   },
   "dependencies": {
-    "chalk": "=4.1.2",
-    "yargs": "^17.5.1",
-    "zod": "^3.17.3"
+    "chalk": "^4.1.2",
+    "yargs": "^17.7.2",
+    "zod": "^3.22.2"
   },
   "files": [
     "out",

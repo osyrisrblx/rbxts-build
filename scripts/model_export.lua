@@ -1,10 +1,13 @@
--- luacheck: globals remodel Instance
+local fs = require("@lune/fs")
+local roblox = require("@lune/roblox")
+local process = require("@lune/process")
 
-local placePath = ...
-local game = remodel.readPlaceFile(placePath)
+local placePath = process.args[1]
+
+local game = roblox.deserializePlace(fs.readFile(placePath))
 local Workspace = game:GetService("Workspace")
 
-for _, folder in pairs(Workspace:GetChildren()) do
+for _, folder in Workspace:GetChildren() do
     if folder.ClassName == "Folder" then
         local modelContents = folder:GetChildren()
         if #modelContents == 0 then
@@ -12,6 +15,6 @@ for _, folder in pairs(Workspace:GetChildren()) do
         elseif #modelContents > 1 then
             error("Multiple roots in " .. folder.Name .. "!")
         end
-        remodel.writeModelFile(modelContents[1], folder.Name)
+        fs.writeFile(folder.Name, roblox.serializeModel(modelContents))
     end
 end

@@ -18,9 +18,9 @@ async function handler() {
 
 	if (platform === "linux" && settings.wslUseExe) {
 		const syncScriptPath = await getWindowsPath(SYNC_SCRIPT_PATH);
-		await run("remodel.exe", ["run", syncScriptPath, PLACEFILE_NAME, outPath]);
+		await run("lune.exe", [syncScriptPath, PLACEFILE_NAME, outPath]);
 	} else {
-		await run("remodel", ["run", SYNC_SCRIPT_PATH, PLACEFILE_NAME, outPath]);
+		await run("lune", [SYNC_SCRIPT_PATH, PLACEFILE_NAME, outPath]);
 	}
 }
 

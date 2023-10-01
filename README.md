@@ -27,7 +27,7 @@ You can use `rbxts-build init` to automatically setup these scripts for you. It'
 	- Force kills the Roblox Studio process
 - **sync**
 	- `rojo build --output game.rbxl`
-	- Uses `remodel` to generate a `src/services.d.ts` file for indexing existing children in roblox-ts.
+	- Uses `lune` to generate a `src/services.d.ts` file for indexing existing children in roblox-ts.
 		- [Refer to this guide for more information](https://roblox-ts.com/docs/guides/indexing-children/)
 
 These scripts should be structured in your `package.json` file as:
@@ -58,7 +58,7 @@ Once you've started working, it's convenient to use `npm restart` (or `npm res` 
 	"syncLocation": "src/services.d.ts",
 	// use rbxtsc-dev instead of rbxtsc, default provided below
 	"dev": false,
-	// WSL-only, use .exe versions of rojo and remodel, default provided below
+	// WSL-only, use .exe versions of rojo and lune, default provided below
 	"wslUseExe": false,
 	// run `rbxtsc -w` + `rojo serve` automatically after Studio opens, default provided below
 	"watchOnOpen": true,

@@ -1,8 +1,11 @@
--- luacheck: globals remodel
+local fs = require("@lune/fs")
+local roblox = require("@lune/roblox")
+local process = require("@lune/process")
 
-local placeFilePath, outPath = ...
+local placeFilePath = process.args[1]
+local outPath = process.args[2]
 
-local game = remodel.readPlaceFile(placeFilePath)
+local game = roblox.deserializePlace(fs.readFile(placeFilePath))
 
 local SERVICE_BLACKLIST = {
 	StarterPlayer = true,
@@ -82,4 +85,4 @@ for _, service in ipairs(game:GetChildren()) do
 	end
 end
 
-remodel.writeFile(outPath, string.match(output, "^(.-)%s*$") .. "\n")
+fs.writeFile(outPath, string.match(output, "^(.-)%s*$") .. "\n")
