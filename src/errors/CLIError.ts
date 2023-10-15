@@ -1,4 +1,4 @@
-import chalk from "chalk";
+import kleur from "kleur";
 import { LoggableError } from "./LoggableError";
 
 export class CLIError extends LoggableError {
@@ -7,6 +7,6 @@ export class CLIError extends LoggableError {
 	}
 
 	public toString() {
-		return `${chalk.red("CLIError")}: ${this.message}`;
+		return `${kleur.red("CLIError")}: ${this.message}`;
 	}
 }

@@ -1,10 +1,10 @@
-import chalk from "chalk";
+import kleur from "kleur";
 import { spawn, SpawnOptions } from "child_process";
 import { CLIError } from "../errors/CLIError";
 
 export function run(command: string, args: ReadonlyArray<string> = []) {
 	return new Promise<void>((resolve, reject) => {
-		console.log(chalk.yellow(command, ...args));
+		console.log(kleur.yellow(command), ...args.map(kleur.yellow));
 		const options: SpawnOptions = { shell: true };
 		const childProcess = spawn(command, args, options);
 		childProcess.stdout?.on("data", data => process.stdout.write(data));

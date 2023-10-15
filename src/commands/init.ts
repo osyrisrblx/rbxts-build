@@ -1,4 +1,4 @@
-import chalk from "chalk";
+import kleur from "kleur";
 import fs from "fs/promises";
 import path from "path";
 import yargs from "yargs";
@@ -18,7 +18,7 @@ async function handler() {
 
 	for (const scriptName of SCRIPT_NAMES) {
 		if (pkgJson.scripts[scriptName] !== undefined) {
-			console.log(chalk.yellow("warning:"), `package.json script "${scriptName}" already exists, overwriting!`);
+			console.log(kleur.yellow("warning:"), `package.json script "${scriptName}" already exists, overwriting!`);
 			console.log(`\toriginal: "${pkgJson.scripts[scriptName]}"`);
 		}
 		pkgJson.scripts[scriptName] = `rbxts-build ${scriptName}`;
