@@ -1,4 +1,6 @@
-name: Publish ${{ inputs.version }}
+name: Publish
+
+run-name: Publish ${{ inputs.version }} by @${{ github.actor }}
 
 on:
   workflow_dispatch:
