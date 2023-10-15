@@ -1,4 +1,4 @@
-name: Publish
+name: Publish ${{ inputs.version }}
 
 on:
   workflow_dispatch:
