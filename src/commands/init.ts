@@ -1,7 +1,7 @@
+import chalk from "chalk";
 import fs from "fs/promises";
 import path from "path";
 import yargs from "yargs";
-import { CLIError } from "../errors/CLIError";
 import { identity } from "../util/identity";
 
 const command = "init";
@@ -18,7 +18,8 @@ async function handler() {
 
 	for (const scriptName of SCRIPT_NAMES) {
 		if (pkgJson.scripts[scriptName] !== undefined) {
-			throw new CLIError(`Updating package.json failed, script "${scriptName}" already exists!`);
+			console.log(chalk.yellow("warning:"), `package.json script "${scriptName}" already exists, overwriting!`);
+			console.log(`\toriginal: "${pkgJson.scripts[scriptName]}"`);
 		}
 		pkgJson.scripts[scriptName] = `rbxts-build ${scriptName}`;
 	}
