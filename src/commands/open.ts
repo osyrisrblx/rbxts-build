@@ -2,6 +2,7 @@ import path from "path";
 import yargs from "yargs";
 import { PLACEFILE_NAME } from "../constants";
 import { getSettings } from "../util/getSettings";
+import { getCommandName } from "../util/getCommandName";
 import { getWindowsPath } from "../util/getWindowsPath";
 import { identity } from "../util/identity";
 import { run } from "../util/run";
@@ -23,7 +24,7 @@ async function handler() {
 	});
 
 	if (settings.watchOnOpen !== false) {
-		await run("npm", ["run", "watch", "--silent"]);
+		await run("npm", ["run", getCommandName(settings, "watch"), "--silent"]);
 	}
 }
 

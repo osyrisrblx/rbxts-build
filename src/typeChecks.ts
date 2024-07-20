@@ -1,5 +1,7 @@
 import * as z from "zod";
 
+export const SCRIPT_NAMES = ["compile", "build", "open", "start", "stop", "sync", "watch"];
+
 export const packageJsonType = z.object({
 	"rbxts-build": z
 		.object({
@@ -9,6 +11,7 @@ export const packageJsonType = z.object({
 			wslUseExe: z.boolean().optional(),
 			dev: z.boolean().optional(),
 			watchOnOpen: z.boolean().optional(),
+			names: z.object(Object.fromEntries(SCRIPT_NAMES.map(name => [name, z.string().optional()]))).optional(),
 		})
 		.optional(),
 });
