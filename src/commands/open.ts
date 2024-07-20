@@ -12,6 +12,7 @@ const command = "open";
 async function handler() {
 	const projectPath = process.cwd();
 	const settings = await getSettings(projectPath);
+	const prefix = settings.prefix ?? "";
 
 	await runPlatform({
 		darwin: () => run("open", [PLACEFILE_NAME]),
@@ -23,7 +24,7 @@ async function handler() {
 	});
 
 	if (settings.watchOnOpen !== false) {
-		await run("npm", ["run", "watch", "--silent"]);
+		await run("npm", ["run", prefix + "watch", "--silent"]);
 	}
 }
 

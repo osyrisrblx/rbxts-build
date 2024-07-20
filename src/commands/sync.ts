@@ -11,8 +11,9 @@ const command = "sync";
 async function handler() {
 	const projectPath = process.cwd();
 	const settings = await getSettings(projectPath);
+	const prefix = settings.prefix ?? "";
 
-	await run("npm", ["run", "build", "--silent"]);
+	await run("npm", ["run", prefix + "build", "--silent"]);
 
 	const outPath = settings.syncLocation ?? "src/services.d.ts";
 

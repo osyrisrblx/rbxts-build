@@ -9,6 +9,7 @@ export const packageJsonType = z.object({
 			wslUseExe: z.boolean().optional(),
 			dev: z.boolean().optional(),
 			watchOnOpen: z.boolean().optional(),
+			prefix: z.string().optional(),
 		})
 		.optional(),
 });

@@ -62,6 +62,8 @@ Once you've started working, it's convenient to use `npm restart` (or `npm res` 
 	"wslUseExe": false,
 	// run `rbxtsc -w` + `rojo serve` automatically after Studio opens, default provided below
 	"watchOnOpen": true,
+	// optional prefix for the `rbxts-build` commands, e.g. "dev:" would run "dev:watch" instead of "watch", default provided below
+	"prefix": ""
 },
 ```
 
