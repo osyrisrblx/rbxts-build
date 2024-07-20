@@ -3,10 +3,10 @@ import fs from "fs/promises";
 import path from "path";
 import yargs from "yargs";
 import { identity } from "../util/identity";
+import { SCRIPT_NAMES } from "../typeChecks";
+import { getCommandName, getSettings } from "../util/getSettings";
 
 const command = "init";
-
-const SCRIPT_NAMES = ["compile", "build", "open", "start", "stop", "sync", "watch"];
 
 async function handler() {
 	const projectPath = process.cwd();
@@ -16,7 +16,10 @@ async function handler() {
 	const pkgJson = JSON.parse((await fs.readFile(pkgJsonPath)).toString());
 	pkgJson.scripts ??= {};
 
-	for (const scriptName of SCRIPT_NAMES) {
+	const settings = await getSettings(projectPath);
+
+	for (const defaultName of SCRIPT_NAMES) {
+		const scriptName = getCommandName(settings, defaultName);
 		if (pkgJson.scripts[scriptName] !== undefined) {
 			console.log(kleur.yellow("warning:"), `package.json script "${scriptName}" already exists, overwriting!`);
 			console.log(`\toriginal: "${pkgJson.scripts[scriptName]}"`);

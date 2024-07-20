@@ -8,3 +8,7 @@ export async function getSettings(projectPath: string) {
 	const pkgJson = packageJsonType.parse(JSON.parse(pkgJsonContents));
 	return pkgJson?.["rbxts-build"] ?? {};
 }
+
+export function getCommandName(settings: packageJsonType["rbxts-build"], command: string) {
+	return settings?.names?.[command] ?? command;
+}

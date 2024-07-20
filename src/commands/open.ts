@@ -1,7 +1,7 @@
 import path from "path";
 import yargs from "yargs";
 import { PLACEFILE_NAME } from "../constants";
-import { getSettings } from "../util/getSettings";
+import { getCommandName, getSettings } from "../util/getSettings";
 import { getWindowsPath } from "../util/getWindowsPath";
 import { identity } from "../util/identity";
 import { run } from "../util/run";
@@ -12,7 +12,6 @@ const command = "open";
 async function handler() {
 	const projectPath = process.cwd();
 	const settings = await getSettings(projectPath);
-	const prefix = settings.prefix ?? "";
 
 	await runPlatform({
 		darwin: () => run("open", [PLACEFILE_NAME]),
@@ -24,7 +23,7 @@ async function handler() {
 	});
 
 	if (settings.watchOnOpen !== false) {
-		await run("npm", ["run", prefix + "watch", "--silent"]);
+		await run("npm", ["run", getCommandName(settings, "watch"), "--silent"]);
 	}
 }
 
