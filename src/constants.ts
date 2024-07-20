@@ -8,6 +8,6 @@ export const VERSION: string = require("../package.json").version;
 export const PLACEFILE_NAME = "game.rbxl";
 export const LOCKFILE_NAME = PLACEFILE_NAME + ".lock";
 
-export const SYNC_SCRIPT_PATH = path.join(PACKAGE_ROOT, "scripts", "sync.lua");
-export const MODEL_IMPORT_SCRIPT_PATH = path.join(PACKAGE_ROOT, "scripts", "model_import.lua");
-export const MODEL_EXPORT_SCRIPT_PATH = path.join(PACKAGE_ROOT, "scripts", "model_export.lua");
+export const SYNC_SCRIPT_PATH = path.join(PACKAGE_ROOT, "scripts", "sync.luau");
+export const MODEL_IMPORT_SCRIPT_PATH = path.join(PACKAGE_ROOT, "scripts", "model_import.luau");
+export const MODEL_EXPORT_SCRIPT_PATH = path.join(PACKAGE_ROOT, "scripts", "model_export.luau");
