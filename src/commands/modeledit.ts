@@ -28,9 +28,9 @@ const handler = async (args: yargs.Arguments) => {
 
 	await runPlatform({
 		linux: async () => {
-			await run("lune", [MODEL_IMPORT_SCRIPT_PATH, tmpFilePath, ...inputArgs]);
+			await run("lune", ["run", MODEL_IMPORT_SCRIPT_PATH, tmpFilePath, ...inputArgs]);
 			await run("powershell.exe", ["/c", `start -Wait ${await getWindowsPath(tmpFilePath)}`]);
-			await run("lune", [MODEL_EXPORT_SCRIPT_PATH, tmpFilePath]);
+			await run("lune", ["run", MODEL_EXPORT_SCRIPT_PATH, tmpFilePath]);
 		},
 	});
 };
