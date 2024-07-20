@@ -1,7 +1,8 @@
 import yargs from "yargs";
 import { identity } from "../util/identity";
 import { run } from "../util/run";
-import { getCommandName, getSettings } from "../util/getSettings";
+import { getSettings } from "../util/getSettings";
+import { getCommandName } from "../util/getCommandName";
 
 const command = "start";
 

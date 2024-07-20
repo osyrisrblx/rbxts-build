@@ -1,6 +1,7 @@
 import yargs from "yargs";
 import { PLACEFILE_NAME, SYNC_SCRIPT_PATH } from "../constants";
-import { getCommandName, getSettings } from "../util/getSettings";
+import { getSettings } from "../util/getSettings";
+import { getCommandName } from "../util/getCommandName";
 import { getWindowsPath } from "../util/getWindowsPath";
 import { identity } from "../util/identity";
 import { run } from "../util/run";

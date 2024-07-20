@@ -4,7 +4,8 @@ import path from "path";
 import yargs from "yargs";
 import { identity } from "../util/identity";
 import { SCRIPT_NAMES } from "../typeChecks";
-import { getCommandName, getSettings } from "../util/getSettings";
+import { getSettings } from "../util/getSettings";
+import { getCommandName } from "../util/getCommandName";
 
 const command = "init";
 
