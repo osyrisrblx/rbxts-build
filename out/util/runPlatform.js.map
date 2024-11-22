@@ -1,0 +1,1 @@
+{"version":3,"file":"runPlatform.js","sourceRoot":"","sources":["../../src/util/runPlatform.ts"],"names":[],"mappings":";;;;;;AAAA,4CAAoB;AAEP,QAAA,QAAQ,GAAG,YAAE,CAAC,QAAQ,EAAE,CAAC;AAEtC,SAAgB,WAAW,CAAI,SAA+C;IAC7E,MAAM,QAAQ,GAAG,SAAS,CAAC,gBAAQ,CAAC,CAAC;IACrC,IAAI,QAAQ,EAAE;QACb,OAAO,QAAQ,EAAE,CAAC;KAClB;IACD,MAAM,yCAAyC,gBAAQ,GAAG,CAAC;AAC5D,CAAC;AAND,kCAMC"}

@@ -1,0 +1,1 @@
+{"version":3,"file":"getWindowsPath.js","sourceRoot":"","sources":["../../src/util/getWindowsPath.ts"],"names":[],"mappings":";;;AAAA,+BAA4B;AAErB,KAAK,UAAU,cAAc,CAAC,MAAc;IAClD,OAAO,CAAC,MAAM,IAAA,SAAG,EAAC,cAAc,MAAM,EAAE,CAAC,CAAC,CAAC,IAAI,EAAE,CAAC,OAAO,CAAC,KAAK,EAAE,MAAM,CAAC,CAAC,OAAO,CAAC,KAAK,EAAE,IAAI,CAAC,CAAC;AAC/F,CAAC;AAFD,wCAEC"}

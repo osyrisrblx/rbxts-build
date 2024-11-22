@@ -1,0 +1,1 @@
+{"version":3,"file":"LoggableError.js","sourceRoot":"","sources":["../../src/errors/LoggableError.ts"],"names":[],"mappings":";;;AAAA,MAAsB,aAAc,SAAQ,KAAK;IAChD,YAAY,OAAgB;QAC3B,KAAK,CAAC,OAAO,CAAC,CAAC;QACf,QAAQ,CAAC;IACV,CAAC;IAIM,GAAG;QACT,OAAO,CAAC,GAAG,CAAC,IAAI,CAAC,QAAQ,EAAE,CAAC,CAAC;IAC9B,CAAC;CACD;AAXD,sCAWC"}
