@@ -13,10 +13,10 @@
 		"devlink": "cd devlink && npm link"
 	},
 	"keywords": [],
-	"author": "osyrisrblx",
+	"author": "CapedBojji",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/osyrisrblx/rbxts-build.git"
+		"url": "https://github.com/CapedBojji/rbxts-build.git"
 	},
 	"license": "MIT",
 	"devDependencies": {
