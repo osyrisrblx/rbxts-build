@@ -5,6 +5,9 @@ import { LOCKFILE_NAME } from "../constants";
 import { identity } from "../util/identity";
 import { run } from "../util/run";
 import { runPlatform } from "../util/runPlatform";
+import { getLinuxEnvironment } from "../util/getLinuxEnvironment";
+import { execSync } from "child_process";
+import { killProcess } from "../util/killLinuxProcess";
 
 const command = "stop";
 
@@ -19,7 +22,14 @@ async function handler() {
 
 		await runPlatform({
 			darwin: () => run("kill", ["-9", processId]),
-			linux: () => run("taskkill.exe", ["/f", "/pid", processId]),
+			linux: () => {
+				const environment = getLinuxEnvironment()
+				if (environment !== undefined && environment === "linux") {
+					return killProcess("vinegar")
+				} else {
+					return run("taskkill.exe", ["/f", "/pid", processId])
+				}
+			},
 			win32: () => run("taskkill", ["/f", "/pid", processId]),
 		});
 	} catch {}

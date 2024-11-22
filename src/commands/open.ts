@@ -7,6 +7,7 @@ import { getWindowsPath } from "../util/getWindowsPath";
 import { identity } from "../util/identity";
 import { run } from "../util/run";
 import { runPlatform } from "../util/runPlatform";
+import { getLinuxEnvironment } from "../util/getLinuxEnvironment";
 
 const command = "open";
 
@@ -17,8 +18,13 @@ async function handler() {
 	await runPlatform({
 		darwin: () => run("open", [PLACEFILE_NAME]),
 		linux: async () => {
-			const fsPath = await getWindowsPath(path.join(projectPath, PLACEFILE_NAME));
-			return run("powershell.exe", ["/c", `start ${fsPath}`]);
+			const environment = getLinuxEnvironment()
+			if (environment !== undefined && environment === "linux") {
+				run("xdg-open", [PLACEFILE_NAME])
+			} else {
+				const fsPath = await getWindowsPath(path.join(projectPath, PLACEFILE_NAME));
+				return run("powershell.exe", ["/c", `start ${fsPath}`]);
+			}
 		},
 		win32: () => run("start", [PLACEFILE_NAME]),
 	});
