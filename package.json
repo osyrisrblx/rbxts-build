@@ -7,8 +7,8 @@
 		"rbxts-build": "out/index.js"
 	},
 	"scripts": {
-		"build": "tspc",
-		"build-watch": "tspc -w",
+		"build": "tsc",
+		"build-watch": "tsc -w",
 		"prepublishOnly": "npm run build",
 		"devlink": "cd devlink && npm link"
 	},
