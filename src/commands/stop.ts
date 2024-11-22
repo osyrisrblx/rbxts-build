@@ -7,7 +7,7 @@ import { run } from "../util/run";
 import { runPlatform } from "../util/runPlatform";
 import { getLinuxEnvironment } from "../util/getLinuxEnvironment";
 import { execSync } from "child_process";
-import { killProcess } from "../util/killLinuxProcess";
+import { killPid, killProcess } from "../util/killLinuxProcess";
 
 const command = "stop";
 
@@ -25,6 +25,7 @@ async function handler() {
 			linux: () => {
 				const environment = getLinuxEnvironment()
 				if (environment !== undefined && environment === "linux") {
+					killPid(processId)
 					return killProcess("vinegar")
 				} else {
 					return run("taskkill.exe", ["/f", "/pid", processId])

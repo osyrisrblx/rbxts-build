@@ -1,6 +1,7 @@
 import { execSync } from "child_process";
 import { getLinuxEnvironment } from "./getLinuxEnvironment";
 import { CLIError } from "../errors/CLIError";
+import internal from "stream";
 
 export function killProcess(processName: string) {
     return new Promise<void>((resolve, reject) => {
@@ -31,3 +32,17 @@ export function killProcess(processName: string) {
     }) 
 }
 
+
+export function killPid(pid: string) {
+    return new Promise<void>((resolve, reject) => {
+        const environment = getLinuxEnvironment()
+        if (environment !== undefined && environment !== "linux")
+            return reject()
+
+        console.log(`Killing process with PID: ${pid}`);
+        execSync(`kill -9 ${pid}`);
+        resolve()
+    }).catch(() => {
+        throw new CLIError(`Error occurred while killing a process ${pid}`)
+    }) 
+}
