@@ -1,8 +1,7 @@
 import fs from "fs/promises";
 import path from "path";
 import { LOCKFILE_NAME } from "../constants";
-import { cmd } from "./cmd";
-import { escapePowerShellPath } from "./pathSecurity";
+import { readWindowsFileFirstLine, removeWindowsFile } from "./windowsFileOps";
 import { run } from "./run";
 import { runPlatform } from "./runPlatform";
 
@@ -13,9 +12,7 @@ import { runPlatform } from "./runPlatform";
  */
 export async function readProcessIdFromWindowsLockfile(windowsLockFilePath: string): Promise<string | null> {
 	try {
-		const escapedPath = escapePowerShellPath(windowsLockFilePath);
-		const content = await cmd(`powershell.exe -Command "Get-Content -LiteralPath '${escapedPath}' -TotalCount 1"`);
-		const processId = content.trim();
+		const processId = await readWindowsFileFirstLine(windowsLockFilePath);
 		return processId || null;
 	} catch (error) {
 		console.warn(
@@ -70,10 +67,7 @@ export async function terminateStudioProcess(processId: string): Promise<void> {
  */
 export async function cleanupWindowsLockfile(windowsLockFilePath: string): Promise<void> {
 	try {
-		const escapedPath = escapePowerShellPath(windowsLockFilePath);
-		await cmd(
-			`powershell.exe -Command "Remove-Item -LiteralPath '${escapedPath}' -Force -ErrorAction SilentlyContinue"`,
-		);
+		await removeWindowsFile(windowsLockFilePath);
 	} catch (error) {
 		// Ignore cleanup errors - lockfile might already be gone
 	}

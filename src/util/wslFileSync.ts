@@ -4,6 +4,21 @@ import { cmd } from "./cmd";
 import { getWindowsPath } from "./getWindowsPath";
 import { platform } from "./runPlatform";
 import { validateWindowsPath, escapePowerShellPath } from "./pathSecurity";
+import {
+	DEFAULT_STUDIO_WAIT_TIMEOUT,
+	WSL_PROGRESS_UPDATE_INTERVAL,
+	WSL_RBXTS_BUILD_SUBDIR,
+	WSL_SYNC_POLL_INTERVAL,
+} from "../constants";
+import {
+	testWindowsPath,
+	createWindowsDirectory,
+	copyFileWindows,
+	getWindowsFileModifiedTime,
+	getWindowsTempPath,
+} from "./windowsFileOps";
+
+// Constants for file monitoring and sync operations
 
 /**
  * Check if we're running on WSL
@@ -52,11 +67,10 @@ export async function getWindowsSafePath(
 	}
 
 	// Use Windows temp directory - use PowerShell to get the temp path
-	const windowsTempDir = await cmd('powershell.exe -Command "[System.IO.Path]::GetTempPath()"');
-	const tempPath = windowsTempDir.trim();
+	const tempPath = await getWindowsTempPath();
 
 	// Create a subdirectory for rbxts-build files - use Windows path separators
-	const rbxtsBuildDir = `${tempPath}rbxts-build`;
+	const rbxtsBuildDir = `${tempPath}${WSL_RBXTS_BUILD_SUBDIR}`;
 
 	return `${rbxtsBuildDir}\\${fileName}`;
 }
@@ -80,10 +94,7 @@ export async function ensureWindowsAccessible(
 
 	// Create Windows directory if it doesn't exist using PowerShell
 	try {
-		const escapedWindowsDir = escapePowerShellPath(windowsDir);
-		await cmd(
-			`powershell.exe -Command "if (!(Test-Path -LiteralPath '${escapedWindowsDir}')) { New-Item -ItemType Directory -LiteralPath '${escapedWindowsDir}' -Force }"`,
-		);
+		await createWindowsDirectory(windowsDir);
 	} catch (error) {
 		const originalError = error instanceof Error ? error.message : String(error);
 		throw new Error(
@@ -96,11 +107,7 @@ export async function ensureWindowsAccessible(
 	// Copy file to Windows location using PowerShell
 	try {
 		const wslSourcePath = await getWindowsPath(filePath);
-		const escapedSourcePath = escapePowerShellPath(wslSourcePath);
-		const escapedWindowsPath = escapePowerShellPath(windowsPath);
-		await cmd(
-			`powershell.exe -Command "Copy-Item -LiteralPath '${escapedSourcePath}' -Destination '${escapedWindowsPath}' -Force"`,
-		);
+		await copyFileWindows(wslSourcePath, windowsPath);
 	} catch (error) {
 		const originalError = error instanceof Error ? error.message : String(error);
 		throw new Error(
@@ -124,10 +131,7 @@ export async function syncFromWindows(wslPath: string, windowsPath: string): Pro
 	}
 
 	// Check if Windows file exists using PowerShell
-	const escapedCheckPath = escapePowerShellPath(windowsPath);
-	const windowsFileExists = await cmd(`powershell.exe -Command "Test-Path -LiteralPath '${escapedCheckPath}'"`)
-		.then(result => result.trim().toLowerCase() === "true")
-		.catch(() => false);
+	const windowsFileExists = await testWindowsPath(windowsPath).catch(() => false);
 
 	if (!windowsFileExists) {
 		throw new Error("Windows file does not exist or is not accessible");
@@ -136,11 +140,7 @@ export async function syncFromWindows(wslPath: string, windowsPath: string): Pro
 	// Copy from Windows back to WSL using PowerShell
 	try {
 		const wslTargetPath = await getWindowsPath(wslPath);
-		const escapedSyncWindowsPath = escapePowerShellPath(windowsPath);
-		const escapedWslTargetPath = escapePowerShellPath(wslTargetPath);
-		await cmd(
-			`powershell.exe -Command "Copy-Item -LiteralPath '${escapedSyncWindowsPath}' -Destination '${escapedWslTargetPath}' -Force"`,
-		);
+		await copyFileWindows(windowsPath, wslTargetPath);
 	} catch (error) {
 		throw new Error("Failed to sync file from Windows to WSL");
 	}
@@ -159,9 +159,7 @@ export async function isWindowsFileNewer(wslPath: string, windowsPath: string): 
 		const wslStats = fs.existsSync(wslPath) ? fs.statSync(wslPath) : null;
 
 		// Get Windows file stats using PowerShell
-		const escapedStatsPath = escapePowerShellPath(windowsPath);
-		const windowsStatsCmd = `powershell.exe -Command "(Get-Item -LiteralPath '${escapedStatsPath}').LastWriteTime.ToString('yyyy-MM-dd HH:mm:ss')"`;
-		const windowsDateStr = await cmd(windowsStatsCmd).catch(() => null);
+		const windowsDateStr = await getWindowsFileModifiedTime(windowsPath).catch(() => null);
 
 		if (!wslStats || !windowsDateStr) {
 			return windowsDateStr !== null; // If only Windows file exists, it's "newer"
@@ -181,9 +179,7 @@ export async function isWindowsFileNewer(wslPath: string, windowsPath: string): 
  */
 export async function checkWindowsFileExists(windowsPath: string): Promise<boolean> {
 	try {
-		const escapedPath = escapePowerShellPath(windowsPath);
-		const result = await cmd(`powershell.exe -Command "Test-Path -LiteralPath '${escapedPath}'"`);
-		return result.trim().toLowerCase() === "true";
+		return await testWindowsPath(windowsPath);
 	} catch {
 		return false;
 	}
@@ -192,11 +188,12 @@ export async function checkWindowsFileExists(windowsPath: string): Promise<boole
 /**
  * Wait for a Windows file to exist, with timeout
  */
-export async function waitForWindowsFile(windowsPath: string, timeoutMs: number = 60000): Promise<boolean> {
+export async function waitForWindowsFile(
+	windowsPath: string,
+	timeoutMs: number = DEFAULT_STUDIO_WAIT_TIMEOUT,
+): Promise<boolean> {
 	const startTime = Date.now();
-	const checkInterval = 1000; // Check every 1 second
 	let lastProgressTime = 0;
-	const progressInterval = 10000; // Show progress every 10 seconds
 
 	while (Date.now() - startTime < timeoutMs) {
 		const exists = await checkWindowsFileExists(windowsPath);
@@ -206,14 +203,30 @@ export async function waitForWindowsFile(windowsPath: string, timeoutMs: number 
 
 		// Show progress every 10 seconds
 		const elapsed = Date.now() - startTime;
-		if (elapsed - lastProgressTime >= progressInterval) {
+		if (elapsed - lastProgressTime >= WSL_PROGRESS_UPDATE_INTERVAL) {
 			const remaining = Math.ceil((timeoutMs - elapsed) / 1000);
 			console.log(`Still waiting for Studio to open... (${remaining}s remaining)`);
 			lastProgressTime = elapsed;
 		}
 
-		await new Promise(resolve => setTimeout(resolve, checkInterval));
+		await new Promise(resolve => setTimeout(resolve, WSL_SYNC_POLL_INTERVAL));
 	}
 
 	return false; // Timeout reached
+}
+
+/**
+ * Get the lockfile path for a given place file
+ */
+export async function getLockFilePath(
+	placeFilePath: string,
+	customWindowsPath?: string,
+	useWindowsTemp?: boolean,
+): Promise<string> {
+	if (!isWSL() || useWindowsTemp === false) {
+		return placeFilePath + ".lock";
+	}
+
+	const windowsPath = await getWindowsSafePath(placeFilePath, customWindowsPath, useWindowsTemp);
+	return windowsPath + ".lock";
 }

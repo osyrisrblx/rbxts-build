@@ -1,26 +1,30 @@
 import path from "path";
 import yargs from "yargs";
-import { PLACEFILE_NAME, WSL_SYNC_POLL_INTERVAL } from "../constants";
+import { PLACEFILE_NAME, WSL_SYNC_POLL_INTERVAL, DEFAULT_STUDIO_WAIT_TIMEOUT } from "../constants";
 import { getSettings } from "../util/getSettings";
 import { identity } from "../util/identity";
 import { run } from "../util/run";
-import { platform } from "../util/runPlatform";
+import { processManager, setupSignalHandlers } from "../util/processManager";
 import {
 	shouldUseWindowsTemp,
 	getWindowsSafePath,
+	getLockFilePath,
 	syncFromWindows,
 	isWindowsFileNewer,
 	checkWindowsFileExists,
 	waitForWindowsFile,
+	isWSL,
 } from "../util/wslFileSync";
 
 const command = "watch";
 
 async function handler() {
+	// Setup signal handlers for graceful shutdown during watch
+	setupSignalHandlers();
 	const projectPath = process.cwd();
 	const settings = await getSettings(projectPath);
 
-	const rojo = platform === "linux" && settings.wslUseExe ? "rojo.exe" : "rojo";
+	const rojo = isWSL() && settings.wslUseExe ? "rojo.exe" : "rojo";
 	const rbxtsc = settings.dev ? "rbxtsc-dev" : "rbxtsc";
 	run(rojo, ["serve"]).catch(console.warn);
 	run(rbxtsc, ["-w"].concat(settings.rbxtscArgs ?? [])).catch(console.warn);
@@ -36,7 +40,7 @@ async function handler() {
  */
 async function startWindowsFileWatcher(
 	projectPath: string,
-	settings: { windowsSavePath?: string; useWindowsTemp?: boolean },
+	settings: { windowsSavePath?: string; useWindowsTemp?: boolean; studioWaitTimeout?: number },
 ) {
 	try {
 		const wslFilePath = path.join(projectPath, PLACEFILE_NAME);
@@ -49,14 +53,16 @@ async function startWindowsFileWatcher(
 		console.log(`Monitoring Windows file for Studio changes: ${windowsFilePath}`);
 
 		// Track the lockfile path
-		const windowsLockFile = windowsFilePath + ".lock";
+		const windowsLockFile = await getLockFilePath(wslFilePath, settings.windowsSavePath, settings.useWindowsTemp);
+		const timeout = settings.studioWaitTimeout ?? DEFAULT_STUDIO_WAIT_TIMEOUT;
 
-		// Wait for Studio to create the lockfile (up to 60 seconds)
+		// Wait for Studio to create the lockfile (using configured timeout)
 		console.log(`Waiting for Studio to open (checking for lockfile)...`);
-		const lockFileExists = await waitForWindowsFile(windowsLockFile, 60000);
+		const lockFileExists = await waitForWindowsFile(windowsLockFile, timeout);
 
 		if (!lockFileExists) {
-			console.warn("Timeout: Studio lockfile not detected after 60 seconds.");
+			const timeoutSeconds = Math.ceil(timeout / 1000);
+			console.warn(`Timeout: Studio lockfile not detected after ${timeoutSeconds} seconds.`);
 			console.warn("Studio may not have opened properly. Running stop command to clean up...");
 
 			// Try to stop any Studio processes that might be stuck
@@ -79,6 +85,7 @@ async function startWindowsFileWatcher(
 				const isStudioOpen = await checkWindowsFileExists(windowsLockFile);
 				if (!isStudioOpen) {
 					console.log("Studio closed, stopping sync...");
+					processManager.unregisterInterval(pollInterval);
 					clearInterval(pollInterval);
 					return;
 				}
@@ -97,16 +104,8 @@ async function startWindowsFileWatcher(
 			}
 		}, WSL_SYNC_POLL_INTERVAL);
 
-		// Clean up on process exit
-		process.on("SIGINT", () => {
-			clearInterval(pollInterval);
-			process.exit(0);
-		});
-
-		process.on("SIGTERM", () => {
-			clearInterval(pollInterval);
-			process.exit(0);
-		});
+		// Register interval for cleanup
+		processManager.registerInterval(pollInterval, "Studio file sync polling");
 	} catch (error) {
 		console.warn(`Failed to start file monitor: ${error instanceof Error ? error.message : String(error)}`);
 	}

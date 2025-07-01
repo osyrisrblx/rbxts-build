@@ -11,7 +11,8 @@ import {
 	cleanupWindowsLockfile,
 	cleanupLockfile,
 } from "../util/studioProcess";
-import { shouldUseWindowsTemp, getWindowsSafePath, checkWindowsFileExists } from "../util/wslFileSync";
+import { shouldUseWindowsTemp, getLockFilePath, checkWindowsFileExists } from "../util/wslFileSync";
+import { cleanupAllCaches } from "../util/operationCache";
 
 const command = "stop";
 
@@ -28,12 +29,7 @@ async function tryStopWindowsTempStudio(projectPath: string, settings: RbxtsBuil
 
 	try {
 		const placeFilePath = path.join(projectPath, PLACEFILE_NAME);
-		const windowsFilePath = await getWindowsSafePath(
-			placeFilePath,
-			settings.windowsSavePath,
-			settings.useWindowsTemp,
-		);
-		const windowsLockFile = windowsFilePath + ".lock";
+		const windowsLockFile = await getLockFilePath(placeFilePath, settings.windowsSavePath, settings.useWindowsTemp);
 
 		const windowsLockExists = await checkWindowsFileExists(windowsLockFile);
 		if (windowsLockExists) {
@@ -96,23 +92,28 @@ async function tryStopLocalStudio(projectPath: string): Promise<boolean> {
  * Main handler for the stop command
  */
 async function handler(): Promise<void> {
-	const projectPath = process.cwd();
-	const settings = await getSettings(projectPath);
+	try {
+		const projectPath = process.cwd();
+		const settings = await getSettings(projectPath);
 
-	// Try Windows temp lockfile first if enabled
-	const stoppedFromWindows = await tryStopWindowsTempStudio(projectPath, settings);
-	if (stoppedFromWindows) {
-		return;
+		// Try Windows temp lockfile first if enabled
+		const stoppedFromWindows = await tryStopWindowsTempStudio(projectPath, settings);
+		if (stoppedFromWindows) {
+			return;
+		}
+
+		// Remove local lockfile if it exists
+		const stoppedFromLocal = await tryStopLocalStudio(projectPath);
+		if (!stoppedFromLocal) {
+			console.log("No Studio lockfile found or Studio not running.");
+		}
+
+		// Clean up lockfile regardless of success
+		await cleanupLockfile(projectPath);
+	} finally {
+		// Clean up operation caches to allow process to exit naturally
+		cleanupAllCaches();
 	}
-
-	// Remove local lockfile if it exists
-	const stoppedFromLocal = await tryStopLocalStudio(projectPath);
-	if (!stoppedFromLocal) {
-		console.log("No Studio lockfile found or Studio not running.");
-	}
-
-	// Clean up lockfile regardless of success
-	await cleanupLockfile(projectPath);
 }
 
 export = identity<yargs.CommandModule>({ command, handler });

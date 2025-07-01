@@ -9,6 +9,7 @@ import { identity } from "../util/identity";
 import { run } from "../util/run";
 import { runPlatform } from "../util/runPlatform";
 import { shouldUseWindowsTemp, ensureWindowsAccessible } from "../util/wslFileSync";
+import { openWindowsFile } from "../util/windowsFileOps";
 
 const command = "open";
 
@@ -40,11 +41,12 @@ async function handler() {
 					settings.useWindowsTemp,
 				);
 				console.log(`File copied to Windows-accessible location: ${windowsPath}`);
-				return run("cmd.exe", ["/c", `start "" "${windowsPath}"`]);
+				await openWindowsFile(windowsPath);
+				return;
 			}
 
 			const fsPath = await getWindowsPath(placeFilePath);
-			return run("cmd.exe", ["/c", `start "" "${fsPath}"`]);
+			await openWindowsFile(fsPath);
 		},
 		win32: () => {
 			assertFileExists(PLACEFILE_NAME);

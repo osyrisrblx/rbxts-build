@@ -6,6 +6,7 @@ import { getWindowsPath } from "../util/getWindowsPath";
 import { identity } from "../util/identity";
 import { run } from "../util/run";
 import { platform } from "../util/runPlatform";
+import { isWSL } from "../util/wslFileSync";
 
 const command = "sync";
 
@@ -17,7 +18,7 @@ async function handler() {
 
 	const outPath = settings.syncLocation ?? "src/services.d.ts";
 
-	if (platform === "linux" && settings.wslUseExe) {
+	if (isWSL() && settings.wslUseExe) {
 		const syncScriptPath = await getWindowsPath(SYNC_SCRIPT_PATH);
 		await run("lune.exe", ["run", syncScriptPath, PLACEFILE_NAME, outPath]);
 	} else {
