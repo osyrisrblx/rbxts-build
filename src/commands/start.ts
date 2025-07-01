@@ -12,6 +12,12 @@ async function handler() {
 
 	await run("npm", ["run", getCommandName(settings, "compile"), "--silent"]);
 	await run("npm", ["run", getCommandName(settings, "build"), "--silent"]);
+
+	// Start syncback in parallel if enabled
+	if (settings.syncback) {
+		run("rbxts-build", ["syncback", "--watch", "--wait-for-studio"]).catch(console.warn);
+	}
+
 	await run("npm", ["run", getCommandName(settings, "open"), "--silent"]);
 }
 
