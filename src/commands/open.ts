@@ -29,8 +29,10 @@ async function handler() {
 		win32: () => run("start", [PLACEFILE_NAME]),
 	});
 
+	const packageManager = settings.packageManager ?? "npm";
+
 	if (settings.watchOnOpen !== false) {
-		await run("npm", ["run", getCommandName(settings, "watch"), "--silent"]);
+		await run(packageManager, ["run", getCommandName(settings, "watch"), "--silent"]);
 	}
 }
 
