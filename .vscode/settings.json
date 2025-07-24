@@ -12,5 +12,8 @@
 		"editor.formatOnSave": false,
 		"editor.wordWrap": "bounded",
 		"editor.wordWrapColumn": 120
-	}
+	},
+	"githubPullRequests.ignoredPullRequestBranches": [
+		"master"
+	]
 }
