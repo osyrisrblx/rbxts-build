@@ -11,6 +11,7 @@ export const packageJsonType = z.object({
 			wslUseExe: z.boolean().optional(),
 			dev: z.boolean().optional(),
 			watchOnOpen: z.boolean().optional(),
+			packageManager: z.enum(["npm", "yarn", "pnpm", "bun"]).optional(),
 			names: z.object(Object.fromEntries(SCRIPT_NAMES.map(name => [name, z.string().optional()]))).optional(),
 		})
 		.optional(),

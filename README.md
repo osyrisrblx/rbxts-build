@@ -14,21 +14,25 @@ You can use `rbxts-build init` to automatically setup these scripts for you. It'
 - `npx rbxts-build init`
 
 - **compile**
-	- `rbxtsc --verbose`
+  - `rbxtsc --verbose`
 - **build**
-	- `rojo build --output game.rbxl`
+  - `rojo build --output game.rbxl`
 - **open**
-	- Launches Roblox Studio with `game.rbxl`
+  - Launches Roblox Studio with `game.rbxl`
 - **start**
-	- `npm run compile`
-	- `npm run build`
-	- `npm run open`
+  - `npm run compile`
+  - `npm run build`
+  - `npm run open`
 - **stop**
-	- Force kills the Roblox Studio process
+  - Force kills the Roblox Studio process
 - **sync**
-	- `rojo build --output game.rbxl`
-	- Uses `lune` to generate a `src/services.d.ts` file for indexing existing children in roblox-ts.
-		- [Refer to this guide for more information](https://roblox-ts.com/docs/guides/indexing-children/)
+  - `rojo build --output game.rbxl`
+  - Uses `lune` to generate a `src/services.d.ts` file for indexing existing children in roblox-ts.
+	- [Refer to this guide for more information](https://roblox-ts.com/docs/guides/indexing-children/)
+- **watch**
+  - Runs `rojo serve` and `rbxtsc -w` in parallel to watch for file changes and automatically recompile and sync with Roblox Studio.
+  - Uses `rbxtsc-dev` instead of `rbxtsc` if the `dev` setting is enabled in your `package.json`.
+  - On Linux with `wslUseExe` enabled, uses `rojo.exe` instead of `rojo`.
 
 These scripts should be structured in your `package.json` file as:
 ```json
@@ -50,27 +54,30 @@ Once you've started working, it's convenient to use `npm restart` (or `npm res` 
 **rbxts-build** allows for a few settings in `package.json` under a `"rbxts-build"` key:
 ```js
 "rbxts-build": {
-	// override arguments to rbxtsc, default provided below
-	"rbxtscArgs": ["--verbose"],
-	// override arguments to rojo build, default provided below
-	"rojoBuildArgs": ["--output", "game.rbxl"],
-	// provide a relative file location for the sync command output, default provided below
-	"syncLocation": "src/services.d.ts",
-	// use rbxtsc-dev instead of rbxtsc, default provided below
-	"dev": false,
-	// WSL-only, use .exe versions of rojo and lune, default provided below
-	"wslUseExe": false,
-	// run `rbxtsc -w` + `rojo serve` automatically after Studio opens, default provided below
-	"watchOnOpen": true,
-	// optionally provide a list of names to replace with their default values, an example is provided below
-	"names": {
-		"build": "dev:build",
-		"compile": "dev:compile",
-		"open": "dev:open",
-		"watch": "dev:watch"
-	}
+  // override arguments to rbxtsc, default provided below
+  "rbxtscArgs": ["--verbose"],
+  // override arguments to rojo build, default provided below
+  "rojoBuildArgs": ["--output", "game.rbxl"],
+  // provide a relative file location for the sync command output, default provided below
+  "syncLocation": "src/services.d.ts",
+  // use rbxtsc-dev instead of rbxtsc, default provided below
+  "dev": false,
+  // WSL-only, use .exe versions of rojo and lune, default provided below
+  "wslUseExe": false,
+  // run `rbxtsc -w` + `rojo serve` automatically after Studio opens, default provided below
+  "watchOnOpen": true,
+  // specify which package manager to use for running scripts ("npm", "yarn", "pnpm", or "bun"), default is "npm"
+  "packageManager": "npm",
+  // optionally provide a list of names to replace with their default values, an example is provided below
+  "names": {
+	"build": "dev:build",
+	"compile": "dev:compile",
+	"open": "dev:open",
+	"watch": "dev:watch"
+  }
 },
 ```
+The `packageManager` option allows you to choose which package manager is used for running project scripts (such as `start`, `sync`, `open`, etc). Supported values are `"npm"`, `"yarn"`, `"pnpm"`, and `"bun"`. If not specified, `npm` will be used by default.
 
 ## Hooks
 You can run scripts before and after any **rbxts-build** script by adding new `package.json` scripts with `pre-` or `post-` suffixes.

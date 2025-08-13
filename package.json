@@ -1,14 +1,14 @@
 {
 	"name": "rbxts-build",
-	"version": "2.4.0",
+	"version": "2.4.0-1",
 	"description": "",
 	"main": "out/index.js",
 	"bin": {
 		"rbxts-build": "out/index.js"
 	},
 	"scripts": {
-		"build": "tspc",
-		"build-watch": "tspc -w",
+		"build": "tsc",
+		"build-watch": "tsc -w",
 		"prepublishOnly": "npm run build",
 		"devlink": "cd devlink && npm link"
 	},
@@ -16,7 +16,7 @@
 	"author": "osyrisrblx",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/osyrisrblx/rbxts-build.git"
+		"url": "https://github.com/CapedBojji/rbxts-build.git"
 	},
 	"license": "MIT",
 	"devDependencies": {
