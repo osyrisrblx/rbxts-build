@@ -1,11 +1,11 @@
+import { spawn } from "child_process";
 import kleur from "kleur";
-import { spawn, SpawnOptions } from "child_process";
 import { CLIError } from "../errors/CLIError";
 
 export function run(command: string, args: ReadonlyArray<string> = []) {
 	return new Promise<void>((resolve, reject) => {
 		console.log(kleur.yellow(command), ...args.map(kleur.yellow));
-		const childProcess = spawn(command, args, { shell: false });
+		const childProcess = spawn([command, ...args].join(" "), { shell: true });
 		childProcess.stdout?.on("data", data => process.stdout.write(data));
 		childProcess.stderr?.on("data", data => process.stderr.write(data));
 		childProcess.on("error", err => {
