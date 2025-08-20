@@ -54,6 +54,8 @@ Once you've started working, it's convenient to use `npm restart` (or `npm res` 
 	"rbxtscArgs": ["--verbose"],
 	// override arguments to rojo build, default provided below
 	"rojoBuildArgs": ["--output", "game.rbxl"],
+	// override arguments to rojo serve, default provided below
+	"rojoServeArgs": [],
 	// provide a relative file location for the sync command output, default provided below
 	"syncLocation": "src/services.d.ts",
 	// use rbxtsc-dev instead of rbxtsc, default provided below
