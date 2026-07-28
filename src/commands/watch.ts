@@ -8,13 +8,13 @@ const command = "watch";
 const describe = "Run rbxtsc in watch mode and serve the project with Rojo";
 
 async function handler() {
-	const projectPath = process.cwd();
-	const settings = await getSettings(projectPath);
+        const projectPath = process.cwd();
+        const settings = await getSettings(projectPath);
 
-	const rojo = platform === "linux" && settings.wslUseExe ? "rojo.exe" : "rojo";
-	const rbxtsc = settings.dev ? "rbxtsc-dev" : "rbxtsc";
-	run(rojo, ["serve"]).catch(console.warn);
-	run(rbxtsc, ["-w"].concat(settings.rbxtscArgs ?? [])).catch(console.warn);
+        const rojo = platform === "linux" && settings.wslUseExe ? "rojo.exe" : "rojo";
+        const rbxtsc = settings.dev ? "rbxtsc-dev" : "rbxtsc";
+        run(rojo, ["serve"].concat(settings.rojoServeArgs ?? [])).catch(console.warn);
+        run(rbxtsc, ["-w"].concat(settings.rbxtscArgs ?? [])).catch(console.warn);
 }
 
 export = identity<yargs.CommandModule>({ command, describe, handler });
