@@ -26,6 +26,7 @@ You can use `rbxts-build init` to automatically setup these scripts for you. It'
 	- In a headless session, opens Studio without automatically starting the watch processes
 - **stop**
 	- Force kills the Roblox Studio process
+	- Moves the Studio auto-recovery file left by the killed session into `.rbxts-build/recovery/` so the next launch does not show the auto-recovery prompt ([details](#auto-recovery))
 - **sync**
 	- `rojo build --output game.rbxl`
 	- Uses `lune` to generate a `src/services.d.ts` file for indexing existing children in roblox-ts.
@@ -71,6 +72,8 @@ Use `npm start -- --watch` to start the watch processes in a headless session, o
 	"wslUseExe": false,
 	// run `rbxtsc -w` + `rojo serve` automatically after Studio opens (unless `start` is headless)
 	"watchOnOpen": true,
+	// what `stop` does with the auto-recovery file from the Studio session it killed: "move", "delete", or "keep", default provided below
+	"autoRecovery": "move",
 	// optionally provide a list of names to replace with their default values, an example is provided below
 	"names": {
 		"build": "dev:build",
@@ -80,6 +83,22 @@ Use `npm start -- --watch` to start the watch processes in a headless session, o
 	}
 },
 ```
+
+## Auto-recovery
+
+Studio deletes its auto-recovery files only when it closes normally. Because `stop` force kills Studio, the next `npm start` would otherwise offer to recover a stale copy of `game.rbxl`, which is a build output.
+
+After `stop` kills Studio, it looks for this place's auto-recovery files (`game_AutoRecovery_*.rbxl`) that were written during the killed session, and handles them according to the `autoRecovery` setting:
+- `"move"` (default): moves them into `.rbxts-build/recovery/`, keeping the 5 most recent. They are normal place files, so open one in Studio if you need to get back changes you made in Studio. The folder has its own `.gitignore`.
+- `"delete"`: deletes them.
+- `"keep"`: leaves them in place, so Studio shows the auto-recovery prompt as usual.
+
+Use `npm stop -- --recovery <mode>` to override the setting for a single run.
+
+Files from earlier sessions (for example, a real Studio crash) and files for other places are never touched, and nothing happens if `stop` did not kill a Studio process. The following AutoSaves folders are checked:
+- Windows: `%LOCALAPPDATA%\Roblox\RobloxStudio\AutoSaves` and `%USERPROFILE%\Documents\ROBLOX\AutoSaves`
+- macOS: `~/Library/Application Support/Roblox/RobloxStudio/AutoSaves` and `~/Documents/ROBLOX/AutoSaves`
+- WSL: the Windows folders above, located through `powershell.exe`
 
 ## Hooks
 You can run scripts before and after any **rbxts-build** script by adding new `package.json` scripts with `pre-` or `post-` suffixes.
